@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from src.etl.extract import load_price_events
+from src.etl.extract import load_pos_sales, load_price_events
 from src.etl.transform import normalize_price_events
 from src.metrics.calculator import calculate_all_metrics, describe_metrics
 from src.quality.checks import validate_price_events
@@ -54,9 +54,11 @@ def get_metrics() -> dict:
             "errors": errors,
         }
 
+    pos_sales = load_pos_sales()
+
     return {
         "status": "ok",
-        "metrics": calculate_all_metrics(price_events),
+        "metrics": calculate_all_metrics(price_events, pos_sales),
     }
 
 

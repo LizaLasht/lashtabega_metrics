@@ -17,4 +17,10 @@ METRIC_REGISTRY = {
         "source": "price_events",
         "status": "implemented",
     },
+    "price_mismatch_count": {
+        "name": "Количество ценовых расхождений",
+        "description": "Количество случаев, когда цена продажи из POS отличается от новой цены из витрины price",
+        "source": "price_events, pos_sales",
+        "status": "implemented",
+    },
 }

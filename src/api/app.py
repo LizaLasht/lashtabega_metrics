@@ -5,10 +5,29 @@ from src.etl.transform import normalize_price_events
 from src.metrics.calculator import calculate_all_metrics, describe_metrics
 from src.quality.checks import validate_price_events
 
-app = FastAPI(title="Price Metrics API")
+app = FastAPI(
+    title="API расчёта продуктовых метрик",
+    description=(
+        "Сервис для расчёта продуктовых метрик сервиса управления ценниками. "
+        "API позволяет проверить доступность сервиса, получить рассчитанные метрики "
+        "и посмотреть реестр реализованных метрик."
+    ),
+    version="0.1.0",
+    openapi_tags=[
+        {
+            "name": "Основные методы",
+            "description": "Методы для проверки сервиса и получения рассчитанных метрик",
+        }
+    ],
+)
 
 
-@app.get("/")
+@app.get(
+    "/",
+    tags=["Основные методы"],
+    summary="Проверка доступности сервиса",
+    description="Возвращает статус работы API.",
+)
 def root() -> dict[str, str]:
     return {
         "service": "price metrics",
@@ -16,7 +35,15 @@ def root() -> dict[str, str]:
     }
 
 
-@app.get("/metrics")
+@app.get(
+    "/metrics",
+    tags=["Основные методы"],
+    summary="Получить рассчитанные продуктовые метрики",
+    description=(
+        "Выполняет загрузку тестовых данных из витрины price, "
+        "нормализацию, проверку качества и расчёт продуктовых метрик."
+    ),
+)
 def get_metrics() -> dict:
     price_events = normalize_price_events(load_price_events())
     errors = validate_price_events(price_events)
@@ -33,6 +60,11 @@ def get_metrics() -> dict:
     }
 
 
-@app.get("/metrics/registry")
+@app.get(
+    "/metrics/registry",
+    tags=["Основные методы"],
+    summary="Получить реестр метрик",
+    description="Возвращает описание реализованных продуктовых метрик.",
+)
 def get_metric_registry() -> dict:
     return describe_metrics()

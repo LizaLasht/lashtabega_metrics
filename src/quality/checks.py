@@ -1,6 +1,13 @@
 import pandas as pd
 
 
+def check_empty_dataframe(df: pd.DataFrame) -> list[str]:
+    """Проверка наличия данных для обработки."""
+    if df.empty:
+        return ["Набор данных пустой"]
+    return []
+
+
 def check_required_fields(df: pd.DataFrame, fields: list[str]) -> list[str]:
     """Проверка наличия обязательных полей и пустых значений."""
     errors = []
@@ -49,6 +56,7 @@ def validate_price_events(df: pd.DataFrame) -> list[str]:
     """Общая проверка данных витрины price."""
     errors = []
 
+    errors.extend(check_empty_dataframe(df))
     errors.extend(check_required_fields(df, ["sku", "store_code", "new_price", "event_time"]))
     errors.extend(check_price_values(df))
     errors.extend(check_timestamps(df))

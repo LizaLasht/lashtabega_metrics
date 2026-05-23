@@ -26,3 +26,13 @@ def test_calculate_repeated_print_count():
     result = calculate_repeated_print_count(price_events)
 
     assert result == 1
+
+import pandas as pd
+from src.quality.checks import validate_price_events
+
+
+def test_validate_empty_price_events():
+    empty_df = pd.DataFrame()
+    result = validate_price_events(empty_df)
+
+    assert "Набор данных пустой" in result
